@@ -1,0 +1,3 @@
+#!/bin/sh
+ssh linux "source /opt/stcube/arm/tool4.3.sh; make -C workspace/most2120 O=build -j2 $*"
+cp build/arch/arm/boot/uImage ~/nfs-exports/most2120/boot/

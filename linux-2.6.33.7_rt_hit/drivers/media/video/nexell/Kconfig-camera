@@ -1,0 +1,117 @@
+#choice
+#	prompt "External Camera1"
+#	depends on V4L2_DRIVER_NEXELL
+
+config CAMERA1_S5K4BA
+	tristate "Samsung S5K4BA"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Samsung S5K4BA mobile camera support
+
+config CAMERA1_S5K3BA
+	tristate "Samsung S5K3BA"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Samsung S5K3BA mobile camera support
+
+config CAMERA1_MT9M111
+	tristate "Aptina mt9m111"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Driver for Micron/Aptina sensor MT9M111.
+	  It supports MT9M111 1.3M pixel camera.
+
+config CAMERA1_POA030
+	tristate "Pixelplus POA030R"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Driver for Pixelplus POA030 sensor.
+	  It supports POA030R VGA camera.
+
+config CAMERA1_HI161
+	tristate "Hynix Hi161 1/6inch camera"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Driver for Hi161 sensor.
+	  It supports Hi161 1.3M camera.
+
+config CAMERA1_OV7675
+	tristate "OmniVision OV7675 1/9inch camera"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Driver for OmniVision OV7675 sensor.
+	  It supports OV7675 VGA camera.
+	  
+config CAMERA1_MT9M114
+	tristate "Aptina mt9m114"
+	depends on V4L2_DRIVER_NEXELL
+	---help---
+	  Driver for Micron/Aptina 1/6" sensor MT9M114.
+	  It supports MT9M114 1280X960 pixel camera.
+
+#endchoice
+#choice
+#	prompt "External Camera2"
+#	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+
+config CAMERA2_S5K4BA
+	tristate "2nd CAM Samsung S5K4BA"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Samsung S5K4BA mobile camera support
+
+config CAMERA2_S5K3BA
+	tristate "2nd CAM Samsung S5K3BA"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Samsung S5K3BA mobile camera support
+
+config CAMERA2_T8EJ0
+	tristate "2nd CAM Cowel/Toshiba T8EJ0"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Cowell uses Toshiba CIS sensor T8EJ0.
+	  It supports T8EJ0 2M pixel camera.
+
+config CAMERA2_MT9M111
+	tristate "2nd CAM Aptina mt9m111"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Driver for Micron/Aptina sensor MT9M111.
+	  It supports MT9M111 1.3M pixel camera.
+
+config CAMERA2_POA030
+	tristate "2nd CAM Pixelplus POA030R"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Driver for Pixelplus POA030 sensor.
+	  It supports POA030R VGA camera.
+
+config CAMERA2_HI161
+	tristate "2nd CAM Hynix Hi161 1/6inch camera"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Driver for Hi161 sensor.
+	  It supports Hi161 1.3M camera.
+
+config CAMERA2_DUMMY_COPY
+	tristate "2nd CAM dummy_copy"
+    depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+    ---help---
+      Driver for dummy copy driver for VIP0.
+      It supports AE's scaled driver.
+
+config CAMERA2_OV7675
+	tristate "2nd CAM OmniVision OV7675 1/9inch camera"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Driver for OmniVision OV7675 sensor.
+	  It supports OV7675 VGA camera.
+	  
+config CAMERA2_MT9M114
+	tristate "2nd Aptina mt9m114"
+	depends on V4L2_DRIVER_NEXELL && V4L2_DRIVER_NEXELL_MODULE1
+	---help---
+	  Driver for Micron/Aptina 1/6" sensor MT9M114.
+	  It supports MT9M114 1280X960 pixel camera.
+
