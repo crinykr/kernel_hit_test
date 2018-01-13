@@ -56,6 +56,7 @@ $(obj)/compressed/vmlinux: $(obj)/Image FORCE
 $(obj)/zImage:	$(obj)/compressed/vmlinux FORCE
 	$(call if_changed,objcopy)
 	@echo '  Kernel: $@ is ready'
+	@mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 -n 'my test linux' -d $@ /root/uImage
 
 endif
 
