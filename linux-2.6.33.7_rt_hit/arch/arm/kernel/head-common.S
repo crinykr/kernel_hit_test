@@ -15,6 +15,43 @@
 #define ATAG_CORE_SIZE ((2*4 + 3*4) >> 2)
 #define ATAG_CORE_SIZE_EMPTY ((2*4) >> 2)
 
+		.macro	kputc, val
+		mov	r0, \val
+1:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 1b
+		uxth r3, r0
+		strh r3, [r2, #16]
+2:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 2b
+		.endm
+
+		.macro	kputh, val
+		mov	r0, \val
+		mov r1, #7
+3:		ldr r2, =0xC0016000
+		lsl r3, r1, #2
+		ldrh r2, [r2, #12]
+		asr r3, r0, r3
+		tst r2, #512
+		and r3, r3, #15
+		bne 3b
+		cmp r3, #9
+		add r2, r3, #55
+		addle r2, r3, #48
+		ldr r3, =0xC0016000
+		subs r1, r1, #1
+		strh r2, [r3, #16]
+		bpl 3b
+4:		ldr r3, =0xC0016000
+		ldrh r3, [r3, #12]
+		tst r3, #512
+		bne 4b
+		.endm
+
 	.align	2
 	.type	__switch_data, %object
 __switch_data:
@@ -40,7 +77,6 @@ __switch_data:
  */
 __mmap_switched:
 	adr	r3, __switch_data + 4
-
 	ldmia	r3!, {r4, r5, r6, r7}
 	cmp	r4, r5				@ Copy data segment if needed
 1:	cmpne	r5, r6
@@ -61,6 +97,12 @@ __mmap_switched:
 	str	r2, [r6]			@ Save atags pointer
 	bic	r4, r0, #CR_A			@ Clear 'A' bit
 	stmia	r7, {r0, r4}			@ Save control register values
+
+/*	kputc #'Y'
+	kputc #':'
+	kputh pc
+	1: b 1b */
+
 	b	start_kernel
 ENDPROC(__mmap_switched)
 

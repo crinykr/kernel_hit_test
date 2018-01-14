@@ -12,12 +12,39 @@
 
 		.macro	kputc, val
 		mov	r0, \val
-		bl	nxp2120_putc
+1:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 1b
+		uxth r3, r0
+		strh r3, [r2, #16]
+2:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 2b
 		.endm
 
-		.macro	kputhex, val
+		.macro	kputh, val
 		mov	r0, \val
-		bl	nxp2120_puthex
+		mov r1, #7
+3:		ldr r2, =0xC0016000
+		lsl r3, r1, #2
+		ldrh r2, [r2, #12]
+		asr r3, r0, r3
+		tst r2, #512
+		and r3, r3, #15
+		bne 3b
+		cmp r3, #9
+		add r2, r3, #55
+		addle r2, r3, #48
+		ldr r3, =0xC0016000
+		subs r1, r1, #1
+		strh r2, [r3, #16]
+		bpl 3b
+4:		ldr r3, =0xC0016000
+		ldrh r3, [r3, #12]
+		tst r3, #512
+		bne 4b
 		.endm
 
 		.section ".start", #alloc, #execinstr
@@ -27,11 +54,6 @@
 		.align
 start:
 		.type	start,#function
-		kputc	#'S'
-		kputc	#'0'
-		kputc	#':'
-		kputhex pc
-		kputc	#'\n'
 		b	1f
 		.word	0x016f2818		@ Magic numbers to help the loader
 		.word	start			@ absolute load/run zImage address

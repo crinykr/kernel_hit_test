@@ -22,16 +22,6 @@
 #include <asm/thread_info.h>
 #include <asm/system.h>
 
-		.macro	kputc_2, val
-		mov	r0, \val
-		bl	nxp2120_putc_2
-		.endm
-
-		.macro	kputhex_2, val
-		mov	r0, \val
-		bl	nxp2120_puthex_2
-		.endm
-
 #if (PHYS_OFFSET & 0x001fffff)
 #error "PHYS_OFFSET must be at an even 2MiB boundary!"
 #endif
@@ -140,14 +130,11 @@ ENDPROC(__enable_mmu)
 	.align	5
 __turn_mmu_on:
 	mov	r0, r0
-
 	mcr	p15, 0, r0, c1, c0, 0		@ write control reg
 	mrc	p15, 0, r3, c0, c0, 0		@ read id reg
 	mov	r3, r3
 	mov	r3, r13
 	mov	pc, r3
-
-
 ENDPROC(__turn_mmu_on)
 
 

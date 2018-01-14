@@ -513,6 +513,15 @@ static void __init mm_init(void)
 
 asmlinkage void __init start_kernel(void)
 {
+/*	auto tmp = 0;
+
+	__asm__ __volatile__(
+		"mov %0, pc;"
+		: "=r" (tmp)
+	);
+
+	printk("start_kernel pc:%08X\n", tmp);
+*/
 	char * command_line;
 	extern struct kernel_param __start___param[], __stop___param[];
 
