@@ -51,6 +51,43 @@
 #define KERNEL_START	KERNEL_RAM_VADDR
 #define KERNEL_END	_end
 
+		.macro	kputc, val
+		mov	r0, \val
+1:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 1b
+		uxth r3, r0
+		strh r3, [r2, #16]
+2:		ldr r2, =0xC0016000
+		ldrh r3, [r2, #12]
+		tst r3, #512
+		bne 2b
+		.endm
+
+		.macro	kputh, val
+		mov	r0, \val
+		mov r1, #7
+3:		ldr r2, =0xC0016000
+		lsl r3, r1, #2
+		ldrh r2, [r2, #12]
+		asr r3, r0, r3
+		tst r2, #512
+		and r3, r3, #15
+		bne 3b
+		cmp r3, #9
+		add r2, r3, #55
+		addle r2, r3, #48
+		ldr r3, =0xC0016000
+		subs r1, r1, #1
+		strh r2, [r3, #16]
+		bpl 3b
+4:		ldr r3, =0xC0016000
+		ldrh r3, [r3, #12]
+		tst r3, #512
+		bne 4b
+		.endm
+
 /*
  * Kernel startup entry point.
  * ---------------------------
@@ -73,6 +110,7 @@
 ENTRY(stext)
 	setmode	PSR_F_BIT | PSR_I_BIT | SVC_MODE, r9 @ ensure svc mode
 						@ and irqs disabled
+
 	mrc	p15, 0, r9, c0, c0		@ get processor id
 	bl	__lookup_processor_type		@ r5=procinfo r9=cpuid
 	movs	r10, r5				@ invalid processor (r5=0)?
@@ -93,6 +131,7 @@ ENTRY(stext)
 	ldr	r13, __switch_data		@ address to jump to after
 						@ mmu has been enabled
 	adr	lr, BSYM(__enable_mmu)		@ return (PIC) address
+
  ARM(	add	pc, r10, #PROCINFO_INITFUNC	)
  THUMB(	add	r12, r10, #PROCINFO_INITFUNC	)
  THUMB(	mov	pc, r12				)
