@@ -54,28 +54,22 @@ start:
 
 		.text
 		adr	r0, LC0
- ARM(		ldmia	r0, {r1, r2, r3, r4, r5, r6, r11, ip, sp})
- THUMB(		ldmia	r0, {r1, r2, r3, r4, r5, r6, r11, ip}	)
- THUMB(		ldr	sp, [r0, #32]				)
-		subs	r0, r0, r1		@ calculate the delta offset
+ ARM(	ldmia r0, {r1, r2, r3, r4, r5, r6, r11, ip, sp})
+		sub	r0, r0, r1		@ calculate the delta offset (0x80008000)
 
 		/*
-		 * We're running at a different address.  We need to fix
-		 * up various pointers:
+		 * We're running at a different address.  We need to fix up various pointers:
 		 *   r5 - zImage base address (_start)
 		 *   r6 - size of decompressed image
 		 *   r11 - GOT start
 		 *   ip - GOT end
+ 		 *   r2 - BSS start
+		 *   r3 - BSS end
+		 *   sp - stack pointer
 		 */
 		add	r5, r5, r0
 		add	r11, r11, r0
 		add	ip, ip, r0
-
-		/*
-		 *   r2 - BSS start
-		 *   r3 - BSS end
-		 *   sp - stack pointer
-		 */
 		add	r2, r2, r0
 		add	r3, r3, r0
 		add	sp, sp, r0
@@ -98,11 +92,9 @@ not_relocated:	mov	r0, #0
 		blo	1b
 
 		/*
-		 * The C runtime environment should now be setup
-		 * sufficiently.  Turn the cache on, set up some
-		 * pointers, and start decompressing.
+		 * The C runtime environment should now be setup sufficiently.
+		 * Turn the cache on, set up some pointers, and start decompressing.
 		 */
-
 		bl	cache_on
 
 		mov	r1, sp			@ malloc space above stack
