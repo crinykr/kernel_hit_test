@@ -124,117 +124,78 @@ Disassembly of section .text:
  1bc:	0000000c 	.word	0x0000000c
  1c0:	00000000 	.word	0x00000000
 
-000001c4 <nxp2120_putc>:
- 1d0:	e59f2024 	ldr	r2, [pc, #36]	; 1fc <nxp2120_putc+0x38>
- 1d4:	e1d230bc 	ldrh	r3, [r2, #12]
- 1d8:	e3130c02 	tst	r3, #512	; 0x200
- 1dc:	1afffffb 	bne	1d0 <nxp2120_putc+0xc>
- 1e0:	e6ff3070 	uxth	r3, r0
- 1e4:	e1c231b0 	strh	r3, [r2, #16]
- 1e8:	e59f300c 	ldr	r3, [pc, #12]	; 1fc <nxp2120_putc+0x38>
- 1ec:	e1d330bc 	ldrh	r3, [r3, #12]
- 1f0:	e3130c02 	tst	r3, #512	; 0x200
- 1f4:	1afffffb 	bne	1e8 <nxp2120_putc+0x24>
- 1fc:	c0016000 	.word	0xc0016000
-
-00000200 <nxp2120_puthex>:
- 200:	e1a0c00d 	mov	ip, sp
- 204:	e92dd800 	push	{fp, ip, lr, pc}
- 208:	e24cb004 	sub	fp, ip, #4	; 0x4
- 20c:	e3a01007 	mov	r1, #7	; 0x7
- 210:	e59f2044 	ldr	r2, [pc, #68]	; 25c <nxp2120_puthex+0x5c>
- 214:	e1a03101 	lsl	r3, r1, #2
- 218:	e1d220bc 	ldrh	r2, [r2, #12]
- 21c:	e1a03350 	asr	r3, r0, r3
- 220:	e3120c02 	tst	r2, #512	; 0x200
- 224:	e203300f 	and	r3, r3, #15	; 0xf
- 228:	1afffff8 	bne	210 <nxp2120_puthex+0x10>
- 22c:	e3530009 	cmp	r3, #9	; 0x9
- 230:	e2832037 	add	r2, r3, #55	; 0x37
- 234:	d2832030 	addle	r2, r3, #48	; 0x30
- 238:	e59f301c 	ldr	r3, [pc, #28]	; 25c <nxp2120_puthex+0x5c>
- 23c:	e2511001 	subs	r1, r1, #1	; 0x1
- 240:	e1c321b0 	strh	r2, [r3, #16]
- 244:	5afffff1 	bpl	210 <nxp2120_puthex+0x10>
- 248:	e59f300c 	ldr	r3, [pc, #12]	; 25c <nxp2120_puthex+0x5c>
- 24c:	e1d330bc 	ldrh	r3, [r3, #12]
- 250:	e3130c02 	tst	r3, #512	; 0x200
- 254:	1afffffb 	bne	248 <nxp2120_puthex+0x48>
- 258:	e89da800 	ldm	sp, {fp, sp, pc}
- 25c:	c0016000 	.word	0xc0016000
-
-00000260 <decompress_kernel>:
- 260:	e1a0c00d 	mov	ip, sp
- 264:	e92ddff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
- 268:	e24cb004 	sub	fp, ip, #4	; 0x4
- 26c:	e59fa0fc 	ldr	sl, [pc, #252]	; 370 <decompress_kernel+0x110>
- 270:	e24dd008 	sub	sp, sp, #8	; 0x8
- 274:	e08fa00a 	add	sl, pc, sl
- 278:	e59fc0f4 	ldr	ip, [pc, #244]	; 374 <decompress_kernel+0x114>
- 27c:	e59f50f4 	ldr	r5, [pc, #244]	; 378 <decompress_kernel+0x118>
- 280:	e79a700c 	ldr	r7, [sl, ip]
- 284:	e3a0c003 	mov	ip, #3	; 0x3
- 288:	e1c5c0b0 	strh	ip, [r5]
- 28c:	e3a0c005 	mov	ip, #5	; 0x5
- 290:	e1c5c0b2 	strh	ip, [r5, #2]
- 294:	e59fc0e0 	ldr	ip, [pc, #224]	; 37c <decompress_kernel+0x11c>
- 298:	e5574002 	ldrb	r4, [r7, #-2]
- 29c:	e1d5e0b4 	ldrh	lr, [r5, #4]
- 2a0:	e79ac00c 	ldr	ip, [sl, ip]
- 2a4:	e5578003 	ldrb	r8, [r7, #-3]
- 2a8:	e5579001 	ldrb	r9, [r7, #-1]
- 2ac:	e5576004 	ldrb	r6, [r7, #-4]
- 2b0:	e50bc02c 	str	ip, [fp, #-44]
- 2b4:	e59fc0c4 	ldr	ip, [pc, #196]	; 380 <decompress_kernel+0x120>
- 2b8:	e38ee007 	orr	lr, lr, #7	; 0x7
- 2bc:	e1c5e0b4 	strh	lr, [r5, #4]
- 2c0:	e79ac00c 	ldr	ip, [sl, ip]
- 2c4:	e1a04804 	lsl	r4, r4, #16
- 2c8:	e50bc030 	str	ip, [fp, #-48]
- 2cc:	e51bc02c 	ldr	ip, [fp, #-44]
- 2d0:	e595e040 	ldr	lr, [r5, #64]
- 2d4:	e1866408 	orr	r6, r6, r8, lsl #8
- 2d8:	e58c0000 	str	r0, [ip]
- 2dc:	e59fc0a0 	ldr	ip, [pc, #160]	; 384 <decompress_kernel+0x124>
- 2e0:	e38ee00c 	orr	lr, lr, #12	; 0xc
- 2e4:	e1844c09 	orr	r4, r4, r9, lsl #24
- 2e8:	e79ac00c 	ldr	ip, [sl, ip]
- 2ec:	e1866004 	orr	r6, r6, r4
- 2f0:	e59f0090 	ldr	r0, [pc, #144]	; 388 <decompress_kernel+0x128>
- 2f4:	e58c1000 	str	r1, [ip]
- 2f8:	e59f108c 	ldr	r1, [pc, #140]	; 38c <decompress_kernel+0x12c>
- 2fc:	e3a0c003 	mov	ip, #3	; 0x3
- 300:	e08a0000 	add	r0, sl, r0
- 304:	e79a1001 	ldr	r1, [sl, r1]
- 308:	e5812000 	str	r2, [r1]
- 30c:	e59f207c 	ldr	r2, [pc, #124]	; 390 <decompress_kernel+0x130>
- 310:	e79a2002 	ldr	r2, [sl, r2]
- 314:	e5823000 	str	r3, [r2]
- 318:	e585e040 	str	lr, [r5, #64]
- 31c:	e51b3030 	ldr	r3, [fp, #-48]
- 320:	e5836000 	str	r6, [r3]
- 324:	e3a03fc9 	mov	r3, #804	; 0x324
- 328:	e5853044 	str	r3, [r5, #68]
- 32c:	e1c5c1b4 	strh	ip, [r5, #20]
- 330:	ebffff32 	bl	0 <putstr>
- 334:	e51b302c 	ldr	r3, [fp, #-44]
- 338:	e59f1054 	ldr	r1, [pc, #84]	; 394 <decompress_kernel+0x134>
- 33c:	e5932000 	ldr	r2, [r3]
- 340:	e59f3050 	ldr	r3, [pc, #80]	; 398 <decompress_kernel+0x138>
- 344:	e79a0001 	ldr	r0, [sl, r1]
- 348:	e79a3003 	ldr	r3, [sl, r3]
- 34c:	e0601007 	rsb	r1, r0, r7
- 350:	ebfffffe 	bl	0 <do_decompress>
- 354:	e59f0040 	ldr	r0, [pc, #64]	; 39c <decompress_kernel+0x13c>
- 358:	e08a0000 	add	r0, sl, r0
- 35c:	ebffff27 	bl	0 <putstr>
- 360:	e51bc030 	ldr	ip, [fp, #-48]
- 364:	e59c0000 	ldr	r0, [ip]
- 368:	e24bd028 	sub	sp, fp, #40	; 0x28
- 36c:	e89daff0 	ldm	sp, {r4, r5, r6, r7, r8, r9, sl, fp, sp, pc}
- 370:	000000f4 	.word	0x000000f4
- 374:	00000000 	.word	0x00000000
- 378:	c0016000 	.word	0xc0016000
+000001c4 <decompress_kernel>:
+ 1c4:	e1a0c00d 	mov	ip, sp
+ 1c8:	e92ddff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
+ 1cc:	e24cb004 	sub	fp, ip, #4	; 0x4
+ 1d0:	e59fa0fc 	ldr	sl, [pc, #252]	; 2d4 <decompress_kernel+0x110>
+ 1d4:	e24dd008 	sub	sp, sp, #8	; 0x8
+ 1d8:	e08fa00a 	add	sl, pc, sl
+ 1dc:	e59fc0f4 	ldr	ip, [pc, #244]	; 2d8 <decompress_kernel+0x114>
+ 1e0:	e59f50f4 	ldr	r5, [pc, #244]	; 2dc <decompress_kernel+0x118>
+ 1e4:	e79a700c 	ldr	r7, [sl, ip]
+ 1e8:	e3a0c003 	mov	ip, #3	; 0x3
+ 1ec:	e1c5c0b0 	strh	ip, [r5]
+ 1f0:	e3a0c005 	mov	ip, #5	; 0x5
+ 1f4:	e1c5c0b2 	strh	ip, [r5, #2]
+ 1f8:	e59fc0e0 	ldr	ip, [pc, #224]	; 2e0 <decompress_kernel+0x11c>
+ 1fc:	e5574002 	ldrb	r4, [r7, #-2]
+ 200:	e1d5e0b4 	ldrh	lr, [r5, #4]
+ 204:	e79ac00c 	ldr	ip, [sl, ip]
+ 208:	e5578003 	ldrb	r8, [r7, #-3]
+ 20c:	e5579001 	ldrb	r9, [r7, #-1]
+ 210:	e5576004 	ldrb	r6, [r7, #-4]
+ 214:	e50bc02c 	str	ip, [fp, #-44]
+ 218:	e59fc0c4 	ldr	ip, [pc, #196]	; 2e4 <decompress_kernel+0x120>
+ 21c:	e38ee007 	orr	lr, lr, #7	; 0x7
+ 220:	e1c5e0b4 	strh	lr, [r5, #4]
+ 224:	e79ac00c 	ldr	ip, [sl, ip]
+ 228:	e1a04804 	lsl	r4, r4, #16
+ 22c:	e50bc030 	str	ip, [fp, #-48]
+ 230:	e51bc02c 	ldr	ip, [fp, #-44]
+ 234:	e595e040 	ldr	lr, [r5, #64]
+ 238:	e1866408 	orr	r6, r6, r8, lsl #8
+ 23c:	e58c0000 	str	r0, [ip]
+ 240:	e59fc0a0 	ldr	ip, [pc, #160]	; 2e8 <decompress_kernel+0x124>
+ 244:	e38ee00c 	orr	lr, lr, #12	; 0xc
+ 248:	e1844c09 	orr	r4, r4, r9, lsl #24
+ 24c:	e79ac00c 	ldr	ip, [sl, ip]
+ 250:	e1866004 	orr	r6, r6, r4
+ 254:	e59f0090 	ldr	r0, [pc, #144]	; 2ec <decompress_kernel+0x128>
+ 258:	e58c1000 	str	r1, [ip]
+ 25c:	e59f108c 	ldr	r1, [pc, #140]	; 2f0 <decompress_kernel+0x12c>
+ 260:	e3a0c003 	mov	ip, #3	; 0x3
+ 264:	e08a0000 	add	r0, sl, r0
+ 268:	e79a1001 	ldr	r1, [sl, r1]
+ 26c:	e5812000 	str	r2, [r1]
+ 270:	e59f207c 	ldr	r2, [pc, #124]	; 2f4 <decompress_kernel+0x130>
+ 274:	e79a2002 	ldr	r2, [sl, r2]
+ 278:	e5823000 	str	r3, [r2]
+ 27c:	e585e040 	str	lr, [r5, #64]
+ 280:	e51b3030 	ldr	r3, [fp, #-48]
+ 284:	e5836000 	str	r6, [r3]
+ 288:	e3a03fc9 	mov	r3, #804	; 0x324
+ 28c:	e5853044 	str	r3, [r5, #68]
+ 290:	e1c5c1b4 	strh	ip, [r5, #20]
+ 294:	ebffff59 	bl	0 <putstr>
+ 298:	e51b302c 	ldr	r3, [fp, #-44]
+ 29c:	e59f1054 	ldr	r1, [pc, #84]	; 2f8 <decompress_kernel+0x134>
+ 2a0:	e5932000 	ldr	r2, [r3]
+ 2a4:	e59f3050 	ldr	r3, [pc, #80]	; 2fc <decompress_kernel+0x138>
+ 2a8:	e79a0001 	ldr	r0, [sl, r1]
+ 2ac:	e79a3003 	ldr	r3, [sl, r3]
+ 2b0:	e0601007 	rsb	r1, r0, r7
+ 2b4:	ebfffffe 	bl	0 <do_decompress>
+ 2b8:	e59f0040 	ldr	r0, [pc, #64]	; 300 <decompress_kernel+0x13c>
+ 2bc:	e08a0000 	add	r0, sl, r0
+ 2c0:	ebffff4e 	bl	0 <putstr>
+ 2c4:	e51bc030 	ldr	ip, [fp, #-48]
+ 2c8:	e59c0000 	ldr	r0, [ip]
+ 2cc:	e24bd028 	sub	sp, fp, #40	; 0x28
+ 2d0:	e89daff0 	ldm	sp, {r4, r5, r6, r7, r8, r9, sl, fp, sp, pc}
+ 2d4:	000000f4 	.word	0x000000f4
+ 2d8:	00000000 	.word	0x00000000
+ 2dc:	c0016000 	.word	0xc0016000
 	...
 
 Disassembly of section .bss:
@@ -288,7 +249,7 @@ Disassembly of section .rodata.str1.4:
   50:	62202c65 	eorvs	r2, r0, #25856	; 0x6500
   54:	69746f6f 	ldmdbvs	r4!, {r0, r1, r2, r3, r5, r6, r8, r9, sl, fp, sp, lr}^
   58:	7420676e 	strtvc	r6, [r0], #-1902
-  5c:	6b206568 	blvs	819604 <decompress_kernel+0x8193a4>
+  5c:	6b206568 	blvs	819604 <decompress_kernel+0x819440>
   60:	656e7265 	strbvs	r7, [lr, #-613]!
   64:	000a2e6c 	andeq	r2, sl, ip, ror #28
 

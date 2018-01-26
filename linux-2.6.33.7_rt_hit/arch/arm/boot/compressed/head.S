@@ -58,7 +58,7 @@ start:
 		sub	r0, r0, r1		@ calculate the delta offset (0x80008000)
 
 		/*
-		 * We're running at a different address.  We need to fix up various pointers:
+		 * We're running at a different address. We need to fix up various pointers:
 		 *   r5 - zImage base address (_start)
 		 *   r6 - size of decompressed image
 		 *   r11 - GOT start
@@ -83,8 +83,11 @@ start:
 		cmp	r11, ip
 		blo	1b
 
-not_relocated:	mov	r0, #0
-1:		str	r0, [r2], #4		@ clear bss
+		/*
+		 * Clear BSS
+		 */
+		mov	r0, #0
+1:		str	r0, [r2], #4
 		str	r0, [r2], #4
 		str	r0, [r2], #4
 		str	r0, [r2], #4
@@ -102,10 +105,10 @@ not_relocated:	mov	r0, #0
 
 /*
  * Check to see if we will overwrite ourselves.
- *   r4 = final kernel address
- *   r5 = start of this image
+ *   r4 = final kernel address (0x80008000)
+ *   r5 = start of this image (0x80008000, zImage start address)
  *   r6 = size of decompressed image
- *   r2 = end of malloc space (and therefore this image)
+ *   r2 = end of malloc space (and therefore this image) (0x8008A8EC)
  * We basically want:
  *   r4 >= r2 -> OK
  *   r4 + image length <= r5 -> OK
@@ -142,8 +145,6 @@ not_relocated:	mov	r0, #0
 
 		bl	cache_clean_flush
  ARM(		add	pc, r5, r0		) @ call relocation code
- THUMB(		add	r12, r5, r0		)
- THUMB(		mov	pc, r12			) @ call relocation code
 
 		.align	2
 		.type	LC0, #object
@@ -300,16 +301,12 @@ call_kernel:	bl	cache_clean_flush
  */
 
 call_cache_fn:	adr	r12, proc_types
-#ifdef CONFIG_CPU_CP15
 		mrc	p15, 0, r9, c0, c0	@ get processor ID
-#endif
 1:		ldr	r1, [r12, #0]		@ get value
 		ldr	r2, [r12, #4]		@ get mask
 		eor	r1, r1, r9		@ (real ^ match)
 		tst	r1, r2			@       & mask
  ARM(		addeq	pc, r12, r3		) @ call cache function
- THUMB(		addeq	r12, r3			)
- THUMB(		moveq	pc, r12			) @ call cache function
 		add	r12, r12, #4*5
 		b	1b
 
