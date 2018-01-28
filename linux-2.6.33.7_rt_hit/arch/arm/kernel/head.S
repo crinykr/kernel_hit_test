@@ -1,14 +1,4 @@
 /*
- *  linux/arch/arm/kernel/head.S
- *
- *  Copyright (C) 1994-2002 Russell King
- *  Copyright (c) 2003 ARM Limited
- *  All Rights Reserved
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
- *
  *  Kernel startup code for all 32-bit CPUs
  */
 #include <linux/linkage.h>
@@ -21,14 +11,10 @@
 #include <asm/memory.h>
 #include <asm/thread_info.h>
 #include <asm/system.h>
-
-#if (PHYS_OFFSET & 0x001fffff)
-#error "PHYS_OFFSET must be at an even 2MiB boundary!"
-#endif
+#include <asm/mydbg.h>
 
 #define KERNEL_RAM_VADDR	(PAGE_OFFSET + TEXT_OFFSET)
 #define KERNEL_RAM_PADDR	(PHYS_OFFSET + TEXT_OFFSET)
-
 
 /*
  * swapper_pg_dir is the virtual address of the initial page table.
@@ -37,10 +23,6 @@
  * the least significant 16 bits to be 0x8000, but we could probably
  * relax this restriction to KERNEL_RAM_VADDR >= PAGE_OFFSET + 0x4000.
  */
-#if (KERNEL_RAM_VADDR & 0xffff) != 0x8000
-#error KERNEL_RAM_VADDR must start at 0xXXXX8000
-#endif
-
 	.globl	swapper_pg_dir
 	.equ	swapper_pg_dir, KERNEL_RAM_VADDR - 0x4000
 
@@ -50,43 +32,6 @@
 
 #define KERNEL_START	KERNEL_RAM_VADDR
 #define KERNEL_END	_end
-
-		.macro	kputc, val
-		mov	r0, \val
-1:		ldr r2, =0xC0016000
-		ldrh r3, [r2, #12]
-		tst r3, #512
-		bne 1b
-		uxth r3, r0
-		strh r3, [r2, #16]
-2:		ldr r2, =0xC0016000
-		ldrh r3, [r2, #12]
-		tst r3, #512
-		bne 2b
-		.endm
-
-		.macro	kputh, val
-		mov	r0, \val
-		mov r1, #7
-3:		ldr r2, =0xC0016000
-		lsl r3, r1, #2
-		ldrh r2, [r2, #12]
-		asr r3, r0, r3
-		tst r2, #512
-		and r3, r3, #15
-		bne 3b
-		cmp r3, #9
-		add r2, r3, #55
-		addle r2, r3, #48
-		ldr r3, =0xC0016000
-		subs r1, r1, #1
-		strh r2, [r3, #16]
-		bpl 3b
-4:		ldr r3, =0xC0016000
-		ldrh r3, [r3, #12]
-		tst r3, #512
-		bne 4b
-		.endm
 
 /*
  * Kernel startup entry point.
@@ -110,7 +55,6 @@
 ENTRY(stext)
 	setmode	PSR_F_BIT | PSR_I_BIT | SVC_MODE, r9 @ ensure svc mode
 						@ and irqs disabled
-
 	mrc	p15, 0, r9, c0, c0		@ get processor id
 	bl	__lookup_processor_type		@ r5=procinfo r9=cpuid
 	movs	r10, r5				@ invalid processor (r5=0)?
@@ -133,8 +77,6 @@ ENTRY(stext)
 	adr	lr, BSYM(__enable_mmu)		@ return (PIC) address
 
  ARM(	add	pc, r10, #PROCINFO_INITFUNC	)
- THUMB(	add	r12, r10, #PROCINFO_INITFUNC	)
- THUMB(	mov	pc, r12				)
 ENDPROC(stext)
 
 /*
