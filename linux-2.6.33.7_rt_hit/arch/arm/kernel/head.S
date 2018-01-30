@@ -1,6 +1,3 @@
-/*
- *  Kernel startup code for all 32-bit CPUs
- */
 #include <linux/linkage.h>
 #include <linux/init.h>
 
@@ -85,9 +82,7 @@ ENDPROC(stext)
  * registers.
  */
 __enable_mmu:
-#ifdef CONFIG_ALIGNMENT_TRAP
 	orr	r0, r0, #CR_A
-#endif
 	mov	r5, #(domain_val(DOMAIN_USER, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_KERNEL, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_TABLE, DOMAIN_MANAGER) | \
@@ -174,16 +169,6 @@ __create_page_tables:
 	add	r3, r3, #1 << 20
 	strls	r3, [r0], #4
 	bls	1b
-
-	/*
-	 * Then map first 1MB of ram in case it contains our boot params.
-	 */
-	add	r0, r4, #PAGE_OFFSET >> 18
-	orr	r6, r7, #(PHYS_OFFSET & 0xff000000)
-	.if	(PHYS_OFFSET & 0x00f00000)
-	orr	r6, r6, #(PHYS_OFFSET & 0x00f00000)
-	.endif
-	str	r6, [r0]
 
 	mov	pc, lr
 ENDPROC(__create_page_tables)
