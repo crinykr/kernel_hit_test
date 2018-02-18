@@ -87,7 +87,8 @@ __enable_mmu:
 		      domain_val(DOMAIN_KERNEL, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_TABLE, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_IO, DOMAIN_CLIENT))
-	mcr	p15, 0, r5, c3, c0, 0		@ load domain access register
+
+	mcr	p15, 0, r5, c3, c0, 0		@ load domain access register (r5 = 0x0000001F)
 	mcr	p15, 0, r4, c2, c0, 0		@ load page table pointer
 	b	__turn_mmu_on
 ENDPROC(__enable_mmu)

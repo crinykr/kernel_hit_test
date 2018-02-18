@@ -367,6 +367,7 @@ void cpu_init(void)
 
 static struct machine_desc * __init setup_machine(unsigned int nr)
 {
+	// nr : 0x00000848
 	struct machine_desc *list;
 
 	/*

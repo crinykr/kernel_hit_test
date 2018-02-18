@@ -262,3 +262,17 @@ __vet_atags:
 1:	mov	r2, #0
 	mov	pc, lr
 ENDPROC(__vet_atags)
+
+ENTRY(cdbg_kputh)
+	mov r12, r0
+	adr r0, dbg
+	sub r0, r0, #0x40000000
+	mov pc, r0
+dbg:
+	mmuoff
+	kputc #'H'
+	kputc #'i'
+	kputc #':'
+	kputh r12
+	9999: b 9999b
+ENDPROC(cdbg_kputh)
